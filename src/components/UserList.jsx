@@ -106,6 +106,7 @@ const PagesSelector = styled.div`
   width: 100%;
   justify-content: center;
   margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 const PageButton = styled.button`
