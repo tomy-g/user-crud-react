@@ -11,6 +11,7 @@ const modalStyle = {
     height: "35vh",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "center",
     border: "none",
     borderRadius: "15px",
   },

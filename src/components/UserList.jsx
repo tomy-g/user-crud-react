@@ -144,7 +144,6 @@ const PageButtonDisabled = styled.button`
 `;
 
 const ConfirmTitle = styled.h3`
-  margin-top: 30px;
   margin-left: 10px;
   font-size: 22px;
 `;
