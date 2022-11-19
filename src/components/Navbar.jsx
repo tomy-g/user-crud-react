@@ -34,27 +34,27 @@ const PagesContainer = styled.div`
   justify-content: flex-end;
 `;
 
-const PageTitle = styled(Link)`
-  font-size: large;
-  margin-left: 8rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: #0c2846;
-`;
-const PageTitleSelected = styled(Link)`
-  font-size: large;
-  margin-left: 8rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: #db1b43;
-`;
+
 
 const Logo = styled.img`
   height: 50%;
 `;
 
+const PageTitle = styled(Link)`
+  font-size: large;
+  margin-left: 8rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: ${props => props.selected ? "#db1b43" : "#0c2846"};
+`;
+
 const Navbar = () => {
   const location = useLocation();
+
+            /**
+             == -> compara igualdad del valor
+             === -> compara igaldad del valor y de tipo
+           */
   return (
     <Container>
       <Items>
@@ -64,22 +64,9 @@ const Navbar = () => {
           </LogoContainer>
         </Link>
         <PagesContainer>
-          {location.pathname == "/" ? (
-            <PageTitleSelected to="/">Home</PageTitleSelected>
-          ) : (
-            <PageTitle to="/">Home</PageTitle>
-          )}
-          {location.pathname == "/users" ? (
-            <PageTitleSelected to="/users">User List</PageTitleSelected>
-          ) : (
-            <PageTitle to="/users">User List</PageTitle>
-          )}
-
-          {location.pathname == "/adduser" ? (
-            <PageTitleSelected to="/adduser">Add User</PageTitleSelected>
-          ) : (
-            <PageTitle to="/adduser">Add User</PageTitle>
-          )}
+          <PageTitle selected={location.pathname === "/"} to="/">Home</PageTitle>
+          <PageTitle selected={location.pathname === "/users"} to="/users">User List</PageTitle>
+          <PageTitle selected={location.pathname === "/adduser"} to="/adduser">Add User</PageTitle>
         </PagesContainer>
       </Items>
     </Container>

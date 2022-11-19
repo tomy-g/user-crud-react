@@ -116,7 +116,7 @@ const Home = (props) => {
   };
 
   // Opens modal to confirm deletion
-  function openModal(uid) {
+  function openModal() {
     setIsOpen(true);
   }
   function afterOpenModal() {}

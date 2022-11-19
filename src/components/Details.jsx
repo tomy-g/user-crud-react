@@ -5,6 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import modalStyle from "../styles/modal-style";
 import Modal from "react-modal";
+import {userTemplate} from "../constants";
 
 const Container = styled.div`
   margin-top: 9.5vh;
@@ -138,25 +139,16 @@ const CancelButton = styled.button`
   }
 `;
 
-Modal.setAppElement(document.getElementById("root"));
-
 const Details = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  const [user, setUser] = React.useState({
-    _id: "",
-    name: "",
-    email: "",
-    registered: "",
-    updated: "",
-    password: "",
-  });
+  const [user, setUser] = React.useState(userTemplate());
 
   function openModal() {
     setIsOpen(true);
   }
-  function afterOpenModal() {}
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -178,7 +170,6 @@ const Details = (props) => {
     <Container>
       <Modal
         isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={modalStyle}
         contentLabel="Example Modal"
