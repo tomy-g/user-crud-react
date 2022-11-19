@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import modalStyle from "../styles/modal-style";
 import Modal from "react-modal";
+import { useEffect } from "react";
 
 const Container = styled.div`
   margin-top: 5.5vh;
@@ -217,17 +218,22 @@ const UserList = (props) => {
     (currentPage - 1) * 10,
     currentPage * 10
   );
-  const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(props.users.length / 10); i++) {
-    pageNumbers.push(i);
-  }
+  const [pageNumbers, setPageNumbers] = useState([]);
+
+  useEffect(() => {
+    // un comentario aqui
+    // logica para calcular numeros => helper
+    for (let i = 1; i <= Math.ceil(props.users.length / 10); i++) {
+      setPageNumbers([...pageNumbers, i]);
+    }
+  }, [props.users, currentPage]);
 
   function openModal(uid) {
     setId(uid);
     setIsOpen(true);
   }
-  function afterOpenModal() {}
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -244,7 +250,6 @@ const UserList = (props) => {
         {props.users.length < 1 && <Vacia>Nada que mostrar 😞</Vacia>}
         <Modal
           isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
           onRequestClose={closeModal}
           style={modalStyle}
           contentLabel="Example Modal"

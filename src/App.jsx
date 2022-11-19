@@ -35,13 +35,14 @@ const App = () => {
     }
   }
 
+
+  // TODA esta logica sacarla a un helper o service 
+
   // Called by child component, Returns the user data by passing the id.
   const getUser = (id) => {
     if (users.length > 0) {
       let u = users.find((x) => x._id === id);
       return u;
-    } else {
-      return undefined;
     }
   };
 
@@ -50,7 +51,7 @@ const App = () => {
     let newDate = new Date();
     newDate = moment(newDate).format("YYYY-MM-DDThh:mm");
     _user = {..._user, updated: newDate};
-    const index = users.findIndex((x) => x._id == _user._id);
+    const index = users.findIndex((x) => x._id === _user._id);
     let usersCopy = users;
     usersCopy[index] = _user;
     setUsers(usersCopy);
@@ -68,6 +69,8 @@ const App = () => {
 
   // Called by child component, removes an user from the array
   const deleteUser = (_user) => {
+    //setUsers(service.deleteuser(usersCopy));
+
     const index = users.findIndex((x) => x._id == _user);
     let usersCopy = users;
     usersCopy.splice(index, 1);

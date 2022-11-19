@@ -207,7 +207,6 @@ const Update = (props) => {
 
   const processUser = () => {
     if (userOk) {
-      console.log("Se ha actualizado");
       props.updateUser(user);
       navigate("/users");
     }

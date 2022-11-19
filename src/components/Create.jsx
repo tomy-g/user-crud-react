@@ -1,118 +1,43 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { ObjectID } from "bson";
 import validator from "validator";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import * as Styles from "./Create.style";
+import { userTemplate } from "../constants";
 
-const Container = styled.div`
-  margin-top: 9.5vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 18.75vw;
-  margin-right: 18.75vw;
-`;
-
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  margin-left: 200px;
-`;
-
-const Label = styled.h4`
-  font-size: 20px;
-`;
-
-const Value = styled.input`
-  margin-top: 5px;
-  font-size: 20px;
-  padding-left: 5px;
-  width: 50%;
-`;
-
-const Title = styled.h1`
-  color: #0c2846;
-  font-size: 40px;
-  margin-bottom: 60px;
-  margin-left: 200px;
-`;
-
-const Buttons = styled.div`
-  display: flex;
-`;
-
-const Edit = styled.button`
-  border: none;
-  color: white;
-  background-color: #27a553;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  padding: 5px;
-  width: 100px;
-  margin-left: 200px;
-  margin-top: 50px;
-  &:hover {
-    cursor: pointer;
-    background-color: #1ed85f;
-  }
-`;
-
-const ErrorText = styled.p`
-  color: red;
-  margin-top: 10px;
-`;
 
 const Create = (props) => {
   let navigate = useNavigate();
 
-  const [user, setUser] = React.useState({
-    _id: "",
-    name: "",
-    email: "",
-    registered: "",
-    updated: "",
-    password: "",
-  });
+  const [user, setUser] = useState(userTemplate());
 
-  const [invalidName, setInvalidName] = React.useState(false);
-  const [invalidEmail, setInvalidEmail] = React.useState(false);
-  const [invalidPassword, setInvalidPassword] = React.useState(false);
+  const [invalidName, setInvalidName] = useState(false);
+  const [invalidEmail, setInvalidEmail] = useState(false);
+  const [invalidPassword, setInvalidPassword] = useState(false);
 
-  const [userOk, setUserOk] = React.useState(false);
-  const [pulsed, setPulsed] = React.useState(false);
+  const [userOk, setUserOk] = useState(false);
+  const [pulsed, setPulsed] = useState(false);
 
   useEffect(() => {
-    !user.name ? setInvalidName(true) : setInvalidName(false);
-    user.password.length >= 6 && user.password.length <= 12
-      ? setInvalidPassword(false)
-      : setInvalidPassword(true);
-    validator.isEmail(user.email)
-      ? setInvalidEmail(false)
-      : setInvalidEmail(true);
+    setInvalidName(!user.name);
+    setInvalidPassword(user.password.length >= 6 && user.password.length <= 12);
+    setInvalidEmail(!validator.isEmail(user.email));
   }, [user]);
 
   useEffect(() => {
-    if (!invalidEmail && !invalidName && !invalidPassword) {
-      setUserOk(true);
-    } else {
-      setUserOk(false);
-    }
+    setUserOk(!invalidEmail && !invalidName && !invalidPassword);
   }, [invalidEmail, invalidName, invalidPassword]);
 
   //Uses bson library to generate a MongoDB style ID.
   //If that id is already in the memory, creates a new one.
   const processUser = () => {
     if (userOk) {
-      var id = new ObjectID().toString();
-      while (props.users.find((x) => x._id === id) != undefined) {
+      let id = new ObjectID().toString();
+      // poco legible 
+      while (props.users.find((x) => x._id === id)) {
         id = new ObjectID().toString();
       }
-      console.log(id);
       props.addUser(user, id);
       navigate("/users");
     }
@@ -124,50 +49,46 @@ const Create = (props) => {
   };
 
   return (
-    <Container>
-      <Title>Crear Ususario:</Title>
-      <Section>
-        <Label>Nombre</Label>
-        <Value
+    <Styles.Container>
+      <Styles.Title>Crear Ususario:</Styles.Title>
+      <Styles.Section>
+        <Styles.Label>Nombre</Styles.Label>
+        <Styles.Value
           type="text"
-          onChange={(event) => {
-            setUser({ ...user, name: event.target.value });
-          }}
+          onChange={(event) => setUser({ ...user, name: event.target.value })  }
         />
         {pulsed && invalidName && (
-          <ErrorText>El nombre no puede estar vacío.</ErrorText>
+          <Styles.ErrorText>El nombre no puede estar vacío.</Styles.ErrorText>
         )}
-      </Section>
-      <Section>
-        <Label>Email</Label>
-        <Value
+      </Styles.Section>
+      <Styles.Section>
+        <Styles.Label>Email</Styles.Label>
+        <Styles.Value
           type="text"
           onChange={(event) => {
             setUser({ ...user, email: event.target.value });
           }}
         />
         {pulsed && invalidEmail && (
-          <ErrorText>Introduce una dirección de email válida.</ErrorText>
+          <Styles.ErrorText>Introduce una dirección de email válida.</Styles.ErrorText>
         )}
-      </Section>
-      <Section>
-        <Label>Password</Label>
-        <Value
+      </Styles.Section>
+      <Styles.Section>
+        <Styles.Label>Password</Styles.Label>
+        <Styles.Value
           type="text"
-          onChange={(event) => {
-            setUser({ ...user, password: event.target.value });
-          }}
+          onChange={(event) => setUser({ ...user, password: event.target.value})}
         />
         {pulsed && invalidPassword && (
-          <ErrorText>La contraseña debe tener de 6 a 12 caracteres.</ErrorText>
+          <Styles.ErrorText>La contraseña debe tener de 6 a 12 caracteres.</Styles.ErrorText>
         )}
-      </Section>
-      <Buttons>
-        <Edit onClick={addUser}>
+      </Styles.Section>
+      <Styles.Buttons>
+        <Styles.Edit onClick={addUser}>
           <AddIcon />
-        </Edit>
-      </Buttons>
-    </Container>
+        </Styles.Edit>
+      </Styles.Buttons>
+    </Styles.Container>
   );
 };
 
